@@ -20,6 +20,7 @@ app.use(cookieParser());
 
 
 app.get("/coupon", async (req: Request, res: Response) => {
+    console.log("get endpoint")
     try {
       const coupon = await prisma.coupon.findFirst({
         where: { claims: { none: {} } }, 
@@ -72,14 +73,14 @@ app.post('/claim', async (req,res)=>{
         }
 
         const coupon = await prisma.coupon.findFirst({
-            where: { code: couponCode, claims: { none: {} } }, // Ensure it's unclaimed
+            where: { code: couponCode, claims: { none: {} } }, 
           });
       
         if (!coupon) {
              res.status(400).json({ message: "Invalid or already claimed coupon code!" });
         }
       
-          // 3️⃣ Store the claim in the database
+          
         if(coupon && userIP){
             await prisma.claim.create({
                 data: {
