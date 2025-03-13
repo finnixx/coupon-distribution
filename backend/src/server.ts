@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import cors from 'cors'
 import { Request,Response } from "express";
 import cookieParser from "cookie-parser";
+import voucherCodes from 'voucher-code-generator'
 
 
 dotenv.config();
@@ -15,6 +16,35 @@ const prisma = new PrismaClient();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
+
+
+app.get("/coupon", async (req: Request, res: Response) => {
+    try {
+      const coupon = await prisma.coupon.findFirst({
+        where: { claims: { none: {} } }, 
+        orderBy: { createdAt: "asc" }, 
+      });
+  
+      if (!coupon) {
+        res.status(404).json({ message: "No available coupons at the moment." });
+        return;
+      }
+  
+      res.json({
+        message: "Coupon retrieved successfully.",
+        coupon: {
+          id: coupon.id,
+          code: coupon.code,
+          createdAt: coupon.createdAt,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching coupon:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+  
 
 
   
@@ -65,6 +95,17 @@ app.post('/claim', async (req,res)=>{
 
     
         }
+        const newCouponCode = voucherCodes.generate({
+            length: 5,
+            count: 10,
+            charset: voucherCodes.charset("alphabetic")
+          })[0];
+      
+          await prisma.coupon.create({
+            data: {
+              code: newCouponCode,
+            },
+          });
 
         
 
