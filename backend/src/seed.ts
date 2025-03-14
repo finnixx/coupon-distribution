@@ -3,6 +3,7 @@ import voucher_codes from "voucher-code-generator";
 
 const prisma = new PrismaClient();
 
+
 async function main() {
   const coupons = voucher_codes.generate({
     length: 5,

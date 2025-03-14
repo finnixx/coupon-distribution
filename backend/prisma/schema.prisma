@@ -23,8 +23,8 @@ model Coupon {
 
 model Claim {
   id        String   @id @default(uuid())
-  userIP    String   // Track user by IP
-  cookie    String?  // Optional: Track by browser session
+  userIP    String   
+  cookie    String?  
   couponId  String
   claimedAt DateTime @default(now())
   
