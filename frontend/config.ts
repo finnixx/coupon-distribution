@@ -1,0 +1,1 @@
+export const BACKEND_URL = "https://coupon-distribution-hnuk.onrender.com"

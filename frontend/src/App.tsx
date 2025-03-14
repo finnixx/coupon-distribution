@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BACKEND_URL } from "../config";
 
-
-const API_BASE_URL="http://localhost:3000"
 
 
 const CouponApp =() => {
@@ -25,7 +24,7 @@ const CouponApp =() => {
     }
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/claim`, { couponCode });
+      const response = await axios.post(`${BACKEND_URL}/claim`, { couponCode });
       setClaimedCoupon(response.data.coupon);
       toast.success("Coupon claimed successfully!");
     } catch (error: any) {
@@ -36,7 +35,7 @@ const CouponApp =() => {
   
   const fetchCoupon = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/coupon`);
+      const response = await axios.get(`${BACKEND_URL}/coupon`);
       setAvailableCoupon(response.data.coupon.code);
     } catch (error: any) {
       toast.error(error.response?.data?.message || "No coupons available");
